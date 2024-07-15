@@ -35,17 +35,35 @@ def generate_box(state, P1, P2):
     
     return results
 
-def get_box(perturbation):
+def normalize_vector(vector):
+    # Calculate the magnitude of the vector
+    magnitude = np.linalg.norm(vector)
+    # Divide each component by the magnitude
+    return vector / magnitude
+
+
+def add_perturbation(basis, epsilon):
     
-    theta = perturbation
+    theta = epsilon * (np.random.rand() - 0.5)
     rotation_matrix = np.array([
         [np.cos(theta), -np.sin(theta)],
         [np.sin(theta), np.cos(theta)]
     ])
     
-    e1 = perturbation + np.matrix([[1],[0]])
-    e2 = perturbation + np.matrix([[1/2], [-(math.sqrt(3))/2]])
-    e3 = perturbation + np.matrix([[-1/2], [-math.sqrt(3)/2]])
+    return np.dot(rotation_matrix, basis)
+
+def get_box(perturbation):
+    
+    # theta = perturbation
+    # rotation_matrix = np.array([
+    #     [np.cos(theta), -np.sin(theta)],
+    #     [np.sin(theta), np.cos(theta)]
+    # ])
+    
+    e1 = normalize_vector(add_perturbation(np.matrix([[1],[0]]), perturbation))
+    e2 = normalize_vector(add_perturbation(np.matrix([[1/2], [-(math.sqrt(3))/2]]), perturbation))
+    e3 = normalize_vector(add_perturbation(np.matrix([[-1/2], [-math.sqrt(3)/2]]), perturbation))
+    
 
     print(e1)
     print(e2)
@@ -82,13 +100,9 @@ def get_box(perturbation):
     
     return box
 
-box = get_box(0.1)
+box = get_box(0.06)
 for row in box:
     for col in row:
         print(f"{col[(0, 0)]:>9.3f}", end=" ")  # Use a single space
     print()
 
-# Generate perturbation
-
-
-    
