@@ -63,14 +63,14 @@ constraints = [
     
     X[0][1] == 0.0,
     X[0][2] == 0.0,
-    X[0][3] == -1.0 * (1 - alpha),
+    X[0][3] == -1.0,
     X[0][4] == 1.50,
     X[0][5] == 1.50,
     
     X[1][0] == 0.0,
     X[1][2] == 0.0,
     X[1][3] == 1.50,
-    X[1][4] == -1.0,
+    X[1][4] == -1.0 * (1 - alpha),
     X[1][5] == 1.50,
     
     X[2][0] == 0.0,
@@ -79,14 +79,14 @@ constraints = [
     X[2][4] == 1.50,
     X[2][5] == -1.0,
     
-    X[3][0] == -1.0 * (1 - alpha),
+    X[3][0] == -1.0,
     X[3][1] == 1.50,
     X[3][2] == 1.50,
     X[3][4] == 0,
     X[3][5] == 0,
     
     X[4][0] == 1.50,
-    X[4][1] == -1.00,
+    X[4][1] == -1.0 * (1 - alpha),
     X[4][2] == 1.50,
     X[4][3] == 0,
     X[4][5] == 0,
@@ -97,8 +97,8 @@ constraints = [
     X[5][3] == 0,
     X[5][4] == 0,
     
-    X[0][0] == 2.5 - alpha,
-    X[3][3] == 2.5 - alpha,
+    X[1][1] == 2.5 - alpha,
+    X[4][4] == 2.5 - alpha,
     cp.trace(X) == 15 - 2 * alpha]
 
 # Form and solve the problem
@@ -118,6 +118,18 @@ problem.solve()
 # print("L:")
 # print(L)
 
+# I need to write Eigen Value decomposition of the following:
+print("------------------- Solution Matrix -----------------------")
+print(X.value)
+TEMP = X.copy()
+TEMP = np.round(TEMP.value, decimals=5)
+print(TEMP)
+print("-------------------- Eigen Values -------------------------")
+print(np.round(np.linalg.eigh(X.value)[0], decimals=5))
+print("-------------------- Eigen Vectors ------------------------")
+print(np.round(np.linalg.eigh(X.value)[1], decimals=5))
+print("-----------------------------------------------------------")
+
 # print(L.dot(L.T))
 # print(X.value)
 A0, A1, A2, B0, B1, B2 = sp.symbols('A0 A1 A2 B0 B1 B2')
@@ -131,7 +143,7 @@ print(formatted_result)
 print("----------------------------------------------------\n\n")
 
 L = eigen_decomposition(X.value)
-result = x.T * L * L.T * x + sp.Matrix([alpha * (A0*A0 - 2 * A0 * B0 + B0 * B0)])
+result = x.T * L * L.T * x + sp.Matrix([alpha * (A1 * A1 - 2 * A1 * B1 + B1 * B1)])
 simplified_result = sp.simplify(result)
 formatted_result  = sp.simplify(str(simplified_result))
 
@@ -151,16 +163,5 @@ for n in formatted_result:
     print(n)
     
 print("----------------------------------------------------\n\n")
-
-print(sp.simplify(str(sp.simplify(res + alpha * (A0*A0 - 2 * A0 * B0 + B0 * B0)))))
-# print()
-# print(formatted_result)
+print(sp.simplify(str(sp.simplify(res + alpha * (A1 * A1 - 2 * A1 * B1 + B1 * B1)))))
 print("----------------------------------------------------")
-
-# GPA = 4.3 * 12 + 3.44 * 26
-# print(GPA/42)
-
-
-print(recover_exact_form(176/625))
-print(176/625)
-print(9*(2 ** 0.5) / (25))
