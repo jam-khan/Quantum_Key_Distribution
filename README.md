@@ -6,7 +6,5 @@ Here are a few calculations done:
 1. Probability Distribution Calculation for Quantum Correlations.
 2. Optimization to find a Bell Inequality using CVXPY.
 3. Guessing Probability for the Bell Expression using QuantumNPA.jl library.
-
-Calculations to be done:
-1. Finding SOS decompositions of the Bell Inequality to prove the self-testing.
+4. Finding SOS decompositions of the Bell Inequality to prove the self-testing.
 
